@@ -6,6 +6,12 @@ output: html_document
 ---
 
 ```{r}
+setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+dir.create("df0samples")
+dir.create("df1samples")
+```
+
+```{r}
 createNetwork <- function(i) {
   healthy=SingleNetwork(F=paste(paste("df0samples/df0_sample",toString(i), sep=""),".csv", sep=""))
   result = healthy$PCorBootOmega
