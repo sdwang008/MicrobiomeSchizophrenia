@@ -1,0 +1,4 @@
+,filename,Accuracy,F1
+0,rdforestAllFeatures_finalscore.csv,0.803125,0.7858645955349953
+1,xgboostAllFeatures_finalscore.csv,0.7229166666666667,0.7214034293082532
+2,svmAllFeatures_finalscore.csv,0.6968749999999999,0.6959870350613315

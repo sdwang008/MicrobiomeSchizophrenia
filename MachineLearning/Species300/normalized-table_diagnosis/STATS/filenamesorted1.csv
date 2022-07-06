@@ -1,0 +1,19 @@
+filename,Accuracy,F1,Feature Selection,Classifier,Boost or Bag,group
+rdforestAllFeatures_finalscore.csv,0.742,0.739,All,RF,none,0
+rdforestTop8Genus_finalscore.csv,0.803,0.786,Top8Genus,RF,none,0
+xgboostTop8Genus_finalscore.csv,0.723,0.721,Top8Genus,XGB,none,0
+svmAllFeatures_finalscore.csv,0.601,0.603,All,SVM,none,0
+xgboostAllFeatures_finalscore.csv,0.708,0.705,All,XGB,none,0
+svmTop8Genus_finalscore.csv,0.697,0.696,Top8Genus,SVM,none,0
+xgboostjmi_300_finalscore.csv,0.704,0.701,JMI-300,XGB,none,1
+svmjmi_300_finalscore.csv,0.584,0.603,JMI-300,SVM,none,1
+rdforestjmi_300_finalscore.csv,0.757,0.756,JMI-300,RF,none,1
+xgboostmrmr_300_finalscore.csv,0.675,0.673,MRMR-300,XGB,none,1
+rdforestmrmr_300_finalscore.csv,0.739,0.731,MRMR-300,RF,none,1
+svmmrmr_300_finalscore.csv,0.619,0.614,MRMR-300,SVM,none,1
+xgboostinfogain_300_finalscore.csv,0.622,0.627,IG-300,XGB,none,2
+rdforestinfogain_300_finalscore.csv,0.674,0.678,IG-300,RF,none,2
+svminfogain_300_finalscore.csv,0.626,0.615,IG-300,SVM,none,2
+svmvariance_300_finalscore.csv,0.599,0.603,Var-300,SVM,none,3
+rdforestvariance_300_finalscore.csv,0.761,0.764,Var-300,RF,none,3
+xgboostvariance_300_finalscore.csv,0.686,0.683,Var-300,XGB,none,3

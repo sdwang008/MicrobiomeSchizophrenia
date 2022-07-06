@@ -1,0 +1,23 @@
+---
+title: "ConstructNetwork"
+author: "Dong Wang"
+date: '2022-06-17'
+output: html_document
+---
+
+```{r}
+source('SingleNetwork.R')
+
+healthy=SingleNetwork(F="data/healthy_clr.csv")
+result = healthy$PCorBootOmega
+write.csv(result, 'data/healthyPCor.csv')
+
+schizo=SingleNetwork(F="data/schizo_clr.csv")
+result = schizo$PCorBootOmega
+write.csv(result, 'data/schizoPCor.csv')
+
+# people=SingleNetwork(F="data/people_clr.csv")
+# result = people$PCorBootOmega
+# write.csv(result, 'data/peoplePCor.csv')
+```
+

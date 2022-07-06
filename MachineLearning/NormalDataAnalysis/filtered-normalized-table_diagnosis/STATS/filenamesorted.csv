@@ -1,0 +1,2 @@
+filename,Accuracy,F1,Feature Selection,Classifier,Boost or Bag,group
+rdforestAllFeatures_finalscore.csv,0.748,0.748,All,RF,none,0

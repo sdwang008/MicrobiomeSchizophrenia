@@ -1,0 +1,41 @@
+---
+title: "ConstructNetworkBootstrap"
+author: "Dong Wang"
+date: '2022-06-23'
+output: html_document
+---
+
+```{r}
+createNetwork <- function(i) {
+  healthy=SingleNetwork(F=paste(paste("df0samples/df0_sample",toString(i), sep=""),".csv", sep=""))
+  result = healthy$PCorBootOmega
+  write.csv(result, "df0PCors/df0_sample"+str(i)+"_PCor.csv")
+  
+  schizo=SingleNetwork(F=paste(paste("df0samples/df0_sample",toString(i), sep=""),".csv", sep=""))
+  result = schizo$PCorBootOmega
+  write.csv(result, "df1PCors/df1_sample"+str(i)+"_PCor.csv")
+}
+```
+
+```{r}
+source('SingleNetwork.R')
+
+for (i in 0:99) {
+  healthy=SingleNetwork(F=paste(paste("df0samples/df0_sample",toString(i), sep=""),".csv", sep=""))
+  result = healthy$PCorBootOmega
+  write.csv(result, paste(paste("df0PCors/df0_sample",toString(i), sep=""),"_PCor.csv", sep=""))
+  
+  schizo=SingleNetwork(F=paste(paste("df1samples/df1_sample",toString(i), sep=""),".csv", sep=""))
+  result = schizo$PCorBootOmega
+  write.csv(result, paste(paste("df1PCors/df1_sample",toString(i), sep=""),"_PCor.csv", sep=""))
+  print(i)
+}
+
+# healthy=SingleNetwork(F="data/healthy_clr.csv")
+# result = healthy$PCorBootOmega
+# write.csv(result, 'data/healthyPCor.csv')
+# 
+# schizo=SingleNetwork(F="data/schizo_clr.csv")
+# result = schizo$PCorBootOmega
+# write.csv(result, 'data/schizoPCor.csv')
+```

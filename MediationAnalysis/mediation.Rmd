@@ -1,0 +1,295 @@
+---
+title: "mediation"
+author: "Dong Wang"
+date: '2022-06-02'
+output:
+  html_document: default
+  pdf_document: default
+---
+
+# Setup
+## Load Libraries (install them if needed)
+```{r}
+library("readxl")
+library(naniar)
+library(MASS)
+library(Matrix)
+library(mvtnorm)
+library(sandwich)
+library(mediation)
+source('MedOmniTest.R')
+source('MedTest-Internal.R')
+source('modima.R')
+source('microhima.R')
+library('matrixStats')
+library('vegan')
+library('GUniFrac')
+library('ape')
+library(data.table)
+library(MultiMed)
+library(energy)
+```
+
+## Load all data here, including feature table, metadata, phylogenetic tree
+```{r}
+otu.tab <- fread("row-normalized-table.csv", header=TRUE)
+otu.tab = subset(otu.tab, select = -c(diagnosis))
+family.tab <- fread("family-table.csv", header=TRUE)
+genus.tab <- fread("collapsed-table-genus.csv", header=TRUE)
+gut.meta <- read.csv("metadata.tsv", sep="\t", header=TRUE)
+tree.rooted <- read.tree(file='insertion_tree.relabelled.tre')
+
+# Process feature table (row and column names)
+otu.tab = data.frame(otu.tab)
+otu.tab <- data.frame(otu.tab[,-1], row.names = otu.tab[,1])
+family.tab = data.frame(family.tab)
+family.tab <- data.frame(family.tab, row.names = family.tab[,1])
+genus.tab = data.frame(genus.tab)
+genus.tab <- data.frame(genus.tab, row.names = genus.tab[,1])
+```
+
+
+## Process metadata (get features of interest)
+```{r}
+# Process metadata (get features of interest)
+Result = data.frame(gut.meta)
+Result = subset(Result, select = c(sampleid, diagnosis, depression_cesd10_score, anxiety_score, cognitive_failures_score, years_smoker, bmi, sys, age_corrected, smoking_habits, sex, race_cat, antibiotic_use) )
+Result$diagnosis<-ifelse(Result$diagnosis=="SZ",1,0)
+Result$smoking_habits<-ifelse(Result$smoking_habits=="Yes",1,0)
+Result$antibiotic_use<-ifelse(Result$antibiotic_use=="Yes",1,0)
+Result$sex<-ifelse(Result$sex=="male",1,0)
+Result$race_cat<-ifelse(Result$race_cat=="Caucasian",1,0)
+```
+
+
+# Mediation Analysis with MedTest
+## Smoker variable
+```{r}
+# smoker
+unifracs <- GUniFrac(otu.tab, tree.rooted)$unifracs
+m.list <- list(BC=vegdist(otu.tab, method="bray"),
+		JAC=as.matrix(vegdist(otu.tab, 'jaccard', binary=TRUE)),
+		# UniFrac=unifracs[, , c('d_UW')],
+		GUniFrac=unifracs[, , c('d_0.5')])
+		# WUniFrac=unifracs[, , c('d_1')])
+
+set.seed(12345)
+MedOmniTest(Result$smoking_habits, Result$diagnosis, m.list)
+```
+
+
+## bmi variable
+```{r}
+# bmi
+new_frame = otu.tab
+new_frame$exposure = Result$bmi # change this here for each exposure variable
+new_frame$diagnosis = Result$diagnosis
+new_frame = new_frame[!is.na(as.numeric(new_frame$exposure)), ] 
+exposure = as.numeric(new_frame$exposure)
+diagnosis = as.numeric(new_frame$diagnosis)
+new_frame = subset(new_frame, select = -c(exposure, diagnosis))
+
+unifracs <- GUniFrac(new_frame, tree.rooted)$unifracs
+m.list <- list(BC=vegdist(new_frame, method="bray"),
+		JAC=as.matrix(vegdist(new_frame, 'jaccard', binary=TRUE)),
+		# UniFrac=unifracs[, , c('d_UW')],
+		GUniFrac=unifracs[, , c('d_0.5')])
+		# WUniFrac=unifracs[, , c('d_1')])
+set.seed(12345)
+MedOmniTest(exposure, diagnosis, m.list)
+# ModimaTest <- modima(exposure, new_frame, diagnosis)
+# ModimaTest$estimates
+```
+
+
+## years smoker variable
+```{r}
+# years smoker
+new_frame = otu.tab
+new_frame$exposure = Result$years_smoker
+new_frame$diagnosis = Result$diagnosis
+new_frame = new_frame[!is.na(as.numeric(new_frame$exposure)), ] 
+exposure = as.numeric(new_frame$exposure)
+diagnosis = as.numeric(new_frame$diagnosis)
+new_frame = subset(new_frame, select = -c(exposure, diagnosis))
+
+unifracs <- GUniFrac(new_frame, tree.rooted)$unifracs
+m.list <- list(BC=vegdist(new_frame, method="bray"),
+		JAC=as.matrix(vegdist(new_frame, 'jaccard', binary=TRUE)),
+		# UniFrac=unifracs[, , c('d_UW')],
+		GUniFrac=unifracs[, , c('d_0.5')])
+		# WUniFrac=unifracs[, , c('d_1')])
+set.seed(12345)
+MedOmniTest(exposure, diagnosis, m.list)
+```
+
+
+## anxiety score variable
+```{r}
+# anxiety score
+new_frame = otu.tab
+new_frame$exposure = Result$anxiety_score
+new_frame$diagnosis = Result$diagnosis
+new_frame = new_frame[!is.na(as.numeric(new_frame$exposure)), ] 
+exposure = as.numeric(new_frame$exposure)
+diagnosis = as.numeric(new_frame$diagnosis)
+new_frame = subset(new_frame, select = -c(exposure, diagnosis))
+
+unifracs <- GUniFrac(new_frame, tree.rooted)$unifracs
+m.list <- list(BC=vegdist(new_frame, method="bray"),
+		JAC=as.matrix(vegdist(new_frame, 'jaccard', binary=TRUE)),
+		# UniFrac=unifracs[, , c('d_UW')],
+		GUniFrac=unifracs[, , c('d_0.5')])
+		# WUniFrac=unifracs[, , c('d_1')])
+set.seed(12345)
+MedOmniTest(exposure, diagnosis, m.list)
+```
+
+
+## depression score variable
+```{r}
+# depression score
+new_frame = otu.tab
+new_frame$exposure = Result$depression_cesd10_score
+new_frame$diagnosis = Result$diagnosis
+new_frame = new_frame[!is.na(as.numeric(new_frame$exposure)), ] 
+exposure = as.numeric(new_frame$exposure)
+diagnosis = as.numeric(new_frame$diagnosis)
+new_frame = subset(new_frame, select = -c(exposure, diagnosis))
+
+unifracs <- GUniFrac(new_frame, tree.rooted)$unifracs
+m.list <- list(BC=vegdist(new_frame, method="bray"),
+		JAC=as.matrix(vegdist(new_frame, 'jaccard', binary=TRUE)),
+		# UniFrac=unifracs[, , c('d_UW')],
+		GUniFrac=unifracs[, , c('d_0.5')])
+		# WUniFrac=unifracs[, , c('d_1')])
+set.seed(12345)
+MedOmniTest(exposure, diagnosis, m.list)
+```
+
+
+## age variable
+```{r}
+# age
+new_frame = otu.tab
+new_frame$exposure = Result$age_corrected
+new_frame$diagnosis = Result$diagnosis
+new_frame = new_frame[!is.na(as.numeric(new_frame$exposure)), ] 
+exposure = as.numeric(new_frame$exposure)
+diagnosis = as.numeric(new_frame$diagnosis)
+new_frame = subset(new_frame, select = -c(exposure, diagnosis))
+
+unifracs <- GUniFrac(new_frame, tree.rooted)$unifracs
+m.list <- list(BC=vegdist(new_frame, method="bray"),
+		JAC=as.matrix(vegdist(new_frame, 'jaccard', binary=TRUE)),
+		# UniFrac=unifracs[, , c('d_UW')],
+		GUniFrac=unifracs[, , c('d_0.5')])
+		# WUniFrac=unifracs[, , c('d_1')])
+set.seed(12345)
+MedOmniTest(exposure, diagnosis, m.list)
+```
+
+
+## sex variable
+```{r}
+# sex
+new_frame = otu.tab
+new_frame$exposure = Result$sex
+new_frame$diagnosis = Result$diagnosis
+new_frame = new_frame[!is.na(as.numeric(new_frame$exposure)), ] 
+exposure = as.numeric(new_frame$exposure)
+diagnosis = as.numeric(new_frame$diagnosis)
+new_frame = subset(new_frame, select = -c(exposure, diagnosis))
+
+unifracs <- GUniFrac(new_frame, tree.rooted)$unifracs
+m.list <- list(BC=vegdist(new_frame, method="bray"),
+		JAC=as.matrix(vegdist(new_frame, 'jaccard', binary=TRUE)),
+		# UniFrac=unifracs[, , c('d_UW')],
+		GUniFrac=unifracs[, , c('d_0.5')])
+		# WUniFrac=unifracs[, , c('d_1')])
+set.seed(12345)
+MedOmniTest(exposure, diagnosis, m.list)
+```
+
+
+## race variable
+```{r}
+# race
+new_frame = otu.tab
+new_frame$exposure = Result$race_cat
+new_frame$diagnosis = Result$diagnosis
+new_frame = new_frame[!is.na(as.numeric(new_frame$exposure)), ] 
+exposure = as.numeric(new_frame$exposure)
+diagnosis = as.numeric(new_frame$diagnosis)
+new_frame = subset(new_frame, select = -c(exposure, diagnosis))
+
+unifracs <- GUniFrac(new_frame, tree.rooted)$unifracs
+m.list <- list(BC=vegdist(new_frame, method="bray"),
+		JAC=as.matrix(vegdist(new_frame, 'jaccard', binary=TRUE)),
+		# UniFrac=unifracs[, , c('d_UW')],
+		GUniFrac=unifracs[, , c('d_0.5')])
+		# WUniFrac=unifracs[, , c('d_1')])
+set.seed(12345)
+MedOmniTest(exposure, diagnosis, m.list)
+```
+
+
+## antibiotic variable
+```{r}
+# antibiotic
+new_frame = otu.tab
+new_frame$exposure = Result$antibiotic_use
+new_frame$diagnosis = Result$diagnosis
+new_frame = new_frame[!is.na(as.numeric(new_frame$exposure)), ] 
+exposure = as.numeric(new_frame$exposure)
+diagnosis = as.numeric(new_frame$diagnosis)
+new_frame = subset(new_frame, select = -c(exposure, diagnosis))
+
+unifracs <- GUniFrac(new_frame, tree.rooted)$unifracs
+m.list <- list(BC=vegdist(new_frame, method="bray"),
+		JAC=as.matrix(vegdist(new_frame, 'jaccard', binary=TRUE)),
+		# UniFrac=unifracs[, , c('d_UW')],
+		GUniFrac=unifracs[, , c('d_0.5')])
+		# WUniFrac=unifracs[, , c('d_1')])
+set.seed(12345)
+MedOmniTest(exposure, diagnosis, m.list)
+```
+
+
+
+<!-- # Experimental teseting with MultiMed's medTest -->
+<!-- This tests for multiple biomarkers as mediators simultaneously.  -->
+<!-- No significant species/genus/family was found in this dataset -->
+
+<!-- ## smoker variable -->
+<!-- ```{r} -->
+<!-- medSmoker <- medTest(E=Result$smoking_habits, M=family.tab, Y=Result$diagnosis, nperm = 9999) -->
+<!-- rownames(medSmoker) <- colnames(family.tab) -->
+<!-- medSmoker[which.min(medSmoker[,"p"]),,drop=FALSE] -->
+<!-- medSmoker[,"p"] -->
+<!-- ``` -->
+
+<!-- ## anxiety score variable -->
+<!-- ```{r} -->
+<!-- new_frame = genus.tab -->
+<!-- new_frame$exposure = Result$anxiety_score -->
+<!-- new_frame$diagnosis = Result$diagnosis -->
+<!-- new_frame = new_frame[!is.na(as.numeric(new_frame$exposure)), ]  -->
+<!-- exposure = as.numeric(new_frame$exposure) -->
+<!-- diagnosis = as.numeric(new_frame$diagnosis) -->
+<!-- new_frame = subset(new_frame, select = -c(exposure, diagnosis)) -->
+<!-- print(diagnosis) -->
+
+<!-- medSmoker <- medTest(E=exposure, M=new_frame, Y=diagnosis, nperm = 9999) -->
+<!-- rownames(medSmoker) <- colnames(genus.tab) -->
+<!-- medSmoker[which.min(medSmoker[,"p"]),,drop=FALSE] -->
+<!-- medSmoker[,"p"] -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- medSmoker <- medTest(E=Result$smoking_habits, M=otu.tab, Y=Result$diagnosis, nperm = 999) -->
+<!-- rownames(medSmoker) <- colnames(otu.tab) -->
+<!-- medSmoker[which.min(medSmoker[,"p"]),,drop=FALSE] -->
+<!-- # medSmoker[,"p"] -->
+<!-- ``` -->
+

@@ -1,0 +1,16 @@
+filename,Accuracy,F1,Feature Selection,Classifier,Boost or Bag,group
+xgboostAllFeatures_finalscore.csv,0.739,0.731,All,XGB,none,0
+svmAllFeatures_finalscore.csv,0.547,0.603,All,SVM,none,0
+rdforestAllFeatures_finalscore.csv,0.757,0.753,All,RF,none,0
+svmjmi_100_finalscore.csv,0.588,0.603,JMI-100,SVM,none,1
+svmmrmr_100_finalscore.csv,0.58,0.603,MRMR-100,SVM,none,1
+rdforestjmi_100_finalscore.csv,0.74,0.738,JMI-100,RF,none,1
+xgboostjmi_100_finalscore.csv,0.728,0.72,JMI-100,XGB,none,1
+xgboostmrmr_100_finalscore.csv,0.715,0.707,MRMR-100,XGB,none,1
+rdforestmrmr_100_finalscore.csv,0.707,0.706,MRMR-100,RF,none,1
+rdforestvariance_100_finalscore.csv,0.735,0.737,Var-100,RF,none,2
+svmvariance_100_finalscore.csv,0.561,0.603,Var-100,SVM,none,2
+xgboostinfogain_100_finalscore.csv,0.716,0.708,IG-100,XGB,none,2
+rdforestinfogain_100_finalscore.csv,0.73,0.726,IG-100,RF,none,2
+svminfogain_100_finalscore.csv,0.652,0.632,IG-100,SVM,none,2
+xgboostvariance_100_finalscore.csv,0.712,0.71,Var-100,XGB,none,2
