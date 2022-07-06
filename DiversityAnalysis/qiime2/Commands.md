@@ -1,3 +1,24 @@
+# Beta Diversity Commands
+Change ```p-sampling-depth``` accordingly (9465 for this dataset is best)
+```
+qiime diversity core-metrics-phylogenetic \
+--i-phylogeny rooted-tree.qza \
+--i-table feature-table.qza \
+--p-sampling-depth 9465 \
+--m-metadata-file metadata.tsv \
+--output-dir core-metrics-results
+```
+Change the input distance matrix file accordingly
+```
+qiime diversity beta-group-significance \
+--i-distance-matrix core-metrics-results/bray_curtis_distance_matrix.qza \
+--m-metadata-file metadata.tsv \
+--m-metadata-column diagnosis \
+--o-visualization core-metrics-results/bray-curtis-significance.qzv \
+--p-pairwise
+```
+
+# Sub-group Beta Diversity Commands
 ## 0. Commands to import rep sequences and tree to QIIME 2 format
 ```
 qiime tools import \
