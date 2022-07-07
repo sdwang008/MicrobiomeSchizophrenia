@@ -2,7 +2,7 @@
 
 This project investigates association between human gut microbiome and schizophrenia. The analysis is divided into several parts. Each part is in a separate folder. 
 
-Refer to the READMEs within each folder to get detailed documentation. Data is obtained from [qiita](https://qiita.ucsd.edu/study/description/11710).
+For each part of the analysis, ```cd``` into the respective folder to proceed. Refer to the READMEs within each folder to get detailed documentation. Data is obtained from [qiita](https://qiita.ucsd.edu/study/description/11710).
 
 ## Setup
 

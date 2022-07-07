@@ -1,9 +1,9 @@
 # Diversity Analysis
 
-All analysis is done through QIIME 2, except graphing PCoA is done in [pcoa.ipynb](pcoa.ipynb) using scikit-bio. 
+```cd``` into qiime2 folder and perform diversity analysis. Use the beta diversity commands in [provided commands](qiime2/Commands.md) in terminal to get output bray-curtis-significance.qzv. Open [QIIME view](view.qiime2.org) and drag it in to get information
 
-Refer to QIIME 2's [tutorial](https://docs.qiime2.org/2022.2/tutorials/moving-pictures/#alpha-and-beta-diversity-analysis) for diversity analysis. For sub-group beta diversity analysis, refer to Qiime 2's tutorial and [Commands.md](qiime2/Commands.md) for specific commands. 
+# Sub-group Diversity
 
-## Sub-group Diversity
+Follow the sub-group diversity section in [provided commands](qiime2/Commands.md) to get sub-group diversity analysis results. Change the variables accordingly. 
 
-First, obtain feature table, phylogenetic tree, representative sequences and convert them into QIIME 2 formats. Then, filter feature table based on the feature (diagnosis, sex, race, etc.). Use QIIME 2 commands on the filtered table to conduct beta diversity analysis. 
+Refer to QIIME 2's [tutorial](https://docs.qiime2.org/2022.2/tutorials/moving-pictures/#alpha-and-beta-diversity-analysis) for diversity analysis for additional help. 

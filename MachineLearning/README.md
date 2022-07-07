@@ -4,7 +4,7 @@ This folder utilizes the [machine learning package](https://github.com/Ziad-Atti
 
 ## How to use
 
-The package is run from main.py where you can enter your file name, specify the dependent variable, and configure the predictive models. 
+```cd``` into this folder, and run main.py where you can enter your file name, specify the dependent variable, and configure the predictive models. 
 In addition, all the functions in the package are provided with detailed reference for easy navigation.
 
 ## Prerequisites

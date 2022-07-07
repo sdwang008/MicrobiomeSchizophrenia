@@ -2,6 +2,8 @@
 
 The network analysis procedures are similar to [Loftus et al. (2021)](https://www.nature.com/articles/s41598-021-82449-0#Sec9). 
 
+```cd``` into this folder to proceed. 
+
 ## Network Construction, Analysis and Visualization
 We construct two networks for the healthy and schizophrenic groups. [network0.ipynb](network0.ipynb) is used for some preliminary findings (determining prevalence distribution). 
 
