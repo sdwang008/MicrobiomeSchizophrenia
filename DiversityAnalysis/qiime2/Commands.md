@@ -8,7 +8,7 @@ qiime diversity core-metrics-phylogenetic \
 --m-metadata-file metadata.tsv \
 --output-dir core-metrics-results
 ```
-Change the input distance matrix file accordingly
+Change the input distance matrix file accordingly (you can change bray_curtis_distance_matrix.qza to unweighted_unifrac_distance_matrix.qza)
 ```
 qiime diversity beta-group-significance \
 --i-distance-matrix core-metrics-results/bray_curtis_distance_matrix.qza \
@@ -33,7 +33,7 @@ qiime tools import \
 ```
 
 ## 1. Filter table depending on clinical factor
-Change ```p-where``` to get different filtered tables ([QIIME 2 documentation](https://docs.qiime2.org/2019.10/tutorials/filtering/))
+Change ```p-where``` to get different filtered tables ([QIIME 2 documentation](https://docs.qiime2.org/2019.10/tutorials/filtering/)). This command here filters the feature table to a new table containing only healthy samples. 
 ```
 qiime feature-table filter-samples \
 --i-table feature-table.qza \
@@ -43,23 +43,25 @@ qiime feature-table filter-samples \
 ```
 
 ## 2. Diversity analysis
-Change ```output-dir``` accordingly
+Change ```output-dir``` accordingly for better organization. Here, all comparisons with regard to sex is saved in sex folder. healthy-m-vs-f represents the comparison of males and females in healthy subjects. 
 ```
 qiime diversity core-metrics-phylogenetic \
 --i-phylogeny rooted-tree.qza \
 --i-table sex/healthy-table.qza \
 --p-sampling-depth 9465 \
 --m-metadata-file metadata.tsv \
---output-dir sex/healthy-h-vs-s
+--output-dir sex/healthy-m-vs-f
 ```
 
 ## 3. PERMANOVA for group significance
 Can change bray-curtis to other available distance metrics (unweighted UniFrac)
 ```
 qiime diversity beta-group-significance \
---i-distance-matrix sex/healthy-h-vs-s/bray_curtis_distance_matrix.qza \
+--i-distance-matrix sex/healthy-m-vs-f/bray_curtis_distance_matrix.qza \
 --m-metadata-file metadata.tsv \
---m-metadata-column diagnosis \
---o-visualization sex/healthy-h-vs-s/bray-curtis-significance.qzv \
+--m-metadata-column sex \
+--o-visualization sex/healthy-m-vs-f/bray-curtis-significance.qzv \
 --p-pairwise
 ```
+
+### Do these steps repeatedly, adjusting variables (```p-where``` and ```metadata-column```) to do all sub-group comparisons. 
